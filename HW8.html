@@ -1,0 +1,1234 @@
+
+<!DOCTYPE HTML> 
+
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>HW8</title>
+    
+    <!-- facebook sdk -->
+    <script>
+        window.fbAsyncInit = function() {
+        FB.init({
+                    appId      :'166863237155441',
+                    xfbml      : true,
+                    version    : 'v2.8'
+            });
+        FB.AppEvents.logPageView();
+        };
+
+        (function(d, s, id){
+            var js, fjs = d.getElementsByTagName(s)[0];
+            if (d.getElementById(id)) {return;}
+            js = d.createElement(s); js.id = id;
+            js.src = "https://connect.facebook.net/en_US/sdk.js";
+            fjs.parentNode.insertBefore(js, fjs);
+        }(document, 'script', 'facebook-jssdk'));
+    
+    </script>
+    
+   
+    
+    
+    <link href="//netdna.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
+    
+    <link rel="stylesheet" type="text/css" href="style.css">
+    
+    
+    
+    <!-- Latest compiled and minified CSS -->
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+
+<!-- Optional theme -->
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
+
+    <!-- jQuery library -->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.0/jquery.min.js"></script>
+    
+<!-- Latest compiled and minified JavaScript -->
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+    
+    
+    
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.3/angular.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.3/angular-animate.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.3/angular-sanitize.js"></script>
+    <script src="https://angular-ui.github.io/bootstrap/ui-bootstrap-tpls-2.5.0.js"></script>
+    
+   
+  
+     <script>
+         
+          var lat;
+          var long;
+        
+        function success(pos) {
+            var crd = pos.coords; 
+                lat=crd.latitude;
+                long=crd.longitude;
+            
+                console.log(lat);
+                console.log(long);
+            
+            };  
+         
+        if(navigator.geolocation){
+            navigator.geolocation.getCurrentPosition(success);
+            
+        }else{
+            console.log("geolocation feature not present");
+        }
+    </script>
+    
+    
+     <script src="script.js"></script>
+    
+
+    
+</head>
+    
+<body>
+    
+ 
+    
+
+<div ng-app="myBody" ng-controller="myBodyCtrl">
+    
+    <!-- navigation bar -->
+    
+
+    <nav class="navbar navbar-default">        
+        
+        <div class="container-fluid">
+            
+            <div class="row">
+                
+            <div class="col-xs-12 col-sm-12 col-md-3">
+                <div class="navbar-header">
+                    <p id="navBarHeader" class="navbar-text">FB Search</p>
+                </div>
+            </div>
+                
+            <div class="col-xs-12 col-sm-12 col-md-8">  
+                <form id="form_box" class="navbar-form" novalidate>
+                    
+                    <div class="row">
+                    <div   class="col-xs-8 col-sm-8 col-md-8">
+                        
+                        <div class="row">
+                        <div id="inputGrp" class="input-group col-xs-11 col-sm-11 col-md-12">
+                            <input id="inputKeywordID" autocomplete="on" ng-model="input_keyword" type="text" class="form-control" placeholder="type something..." data-toggle="tooltip" title="Please type a keyword" data-placement="bottom">
+                            
+                            <span  class="input-group-btn">
+                           
+                                <button id="btnSearch"class="btn btn-default" type="submit" ng-click="myFunctionSubmit()">
+                                <span id="btnSearchSpan" class="glyphicon glyphicon-search"></span>
+                                </button>                
+                    
+                            </span> 
+                        </div> 
+                        </div>    
+                    </div>      
+                    <div class="col-xs-4 col-sm-4 col-md-4">
+                         <button id="btnClear" type="button" class="btn btn-default" ng-click="myFunctionClear()" >Clear</button> 
+                    </div>   
+                        
+                    </div>    
+                        
+                </form>
+            </div>
+          </div> 
+      
+        </div>
+    </nav>
+        
+    <!-- navigation tabs -->
+    
+
+    
+    <div class="container-fluid">
+        
+        
+        <div class="row">
+        
+        <ul class="nav nav-pills nav-justified">
+            <li class="active col-xs-12 col-sm-12 col-md-2"><a data-toggle="pill" href="#user">Users</a></li>
+            <li class="col-xs-12 col-sm-12 col-md-2"><a data-toggle="pill" href="#page">Pages</a></li>
+            <li class="col-xs-12 col-sm-12 col-md-2"><a data-toggle="pill" href="#event">Events</a></li>
+            <li class="col-xs-12 col-sm-12 col-md-2"><a data-toggle="pill" href="#place">Places</a></li>
+            <li class="col-xs-12 col-sm-12 col-md-2"><a data-toggle="pill" href="#group">Groups</a></li>
+            <li class="col-xs-12 col-sm-12 col-md-2"><a data-toggle="pill" href="#fav">Favorites</a></li>
+        </ul>
+        
+        </div>       
+       
+        <div class="row">
+                <hr id=lineHR>
+        </div> 
+        
+        
+         <!-- navigation tabs content -->
+        <div class="tab-content">
+            
+            <!-- User tabs content -->
+            
+            
+            <div id="user" class="tab-pane fade in active">
+                
+                <div ng-show="userTabShow">
+                    
+                    <div class="progress tabClass" ng-hide="hideProgressBar">
+                        <div class="progress-bar progress-bar-striped active" role="progressbar" aria-valuenow="45" aria-valuemin="0" aria-valuemax="100" style="width: 45%">
+               
+                        </div>
+                    </div>
+                    
+                    
+                    
+                    
+                <div class="table-responsive" ng-hide="!hideProgressBar">          
+                    <table class="table table-hover">
+                        
+                        <thead>
+                            <tr>
+                                <th>#</th><th>Profile photo</th><th>Name</th><th>Favorite</th><th>Details</th>        
+                            </tr>
+                        </thead>
+                        <tbody>
+                               <tr ng-repeat="x in jsonUser.data">
+                                    <td>{{ $index + 1 }}</td>
+                                    <td><img id="profileImg" src='{{ x.picture.data.url}}' class="img-circle"></td>
+                                    <td>{{ x.name }}</td>
+                                    <td><button type="button" class="btn btn-default btnFav" ng-click="myFunctionFav(x,'user')">
+                                        <span class="glyphicon glyphicon-star-empty" ng-hide="isIdPresent(x.id)"></span>
+                                        <span class="glyphicon glyphicon-star" ng-show="isIdPresent(x.id)"></span>
+                                        </button></td>
+                                    <td><button type="button" class="btn btn-default btnDetails" ng-click="myFunctionDetails(x.id,'user')"><span class="glyphicon glyphicon-chevron-right"></span></button></td>
+                                </tr>
+                        </tbody>
+                        
+                    </table>
+                    
+                    
+                </div>
+                    
+                    <div class="row" ng-hide="!hideProgressBar">
+                    
+                        <div class="col-xs-0 col-sm-1 col-md-2"></div>   
+                        
+                        <div id="centerDiv" class="col-xs-12 col-sm-10 col-md-8 margintop1em marginbottom1em">
+                            
+                            <button class="btn btn-default" ng-show="userPreBtn" ng-click="myFunctionPagination('user',jsonUser.paging.previous)">Previous</button>                            
+                            <button class="btn btn-default next" ng-show="userNextBtn" ng-click="myFunctionPagination('user',jsonUser.paging.next)">Next</button>
+                            
+                        </div>
+                        
+                        <div class="col-xs-0 col-sm-1 col-md-2"></div> 
+                    
+                    </div>    
+                </div>
+            
+            
+           <!--User details content -->
+                <div ng-show="userDetailsShow">                
+                    
+                    
+                    
+                    <div class="row detailRow">
+                        <div class="col-xs-8 col-sm-10 col-md-10">
+                        
+                            <button type="button" class="btn btn-default" ng-click="myFunctionBack('user')"><span class="glyphicon glyphicon-chevron-left"></span><span>Back</span></button>        
+                        
+                        </div>  
+                    
+                         <div class="col-xs-2 col-sm-1 col-md-1 detailStar">
+                        
+                            <button type="button" class="btn btn-default" ng-click="myFunctionFav(jsonUserDetails,'user')">
+                                <span class="glyphicon glyphicon-star-empty" ng-hide="isIdPresent(jsonUserDetails.id)"></span>
+                                        <span class="glyphicon glyphicon-star" ng-show="isIdPresent(jsonUserDetails.id)"></span>
+                             </button>        
+                        
+                        </div>
+                    
+                         <div class="col-xs-2 col-sm-1 col-md-1">
+                        
+                            <button type="button" class="btn btn-default fbShare" ng-click="myFunctionPostFB(jsonUserDetails.name,jsonUserDetails.picture.data.url)"></button>        
+                        
+                        </div>
+                   </div>
+                
+                    <!-- user albums and posts -->
+                    <div class="row">
+                        
+                        <div class="col-xs-12 col-sm-12 col-md-6">
+                        <div class="panel panel-default">
+                            <div class="panel-heading">Albums</div>
+                            <div class="panel-body">
+                             <div class="progress margintop1em" ng-hide="hideUserDetailsProgressBar">
+                                    <div class="progress-bar progress-bar-striped active" role="progressbar" aria-valuenow="45" aria-valuemin="0" aria-valuemax="100" style="width: 45%">
+               
+                                    </div>
+                            </div>
+                            
+                            
+                            <div ng-hide="!hideUserDetailsProgressBar">
+                           <!-- no albums found -->
+                            
+                                <div class="panel margintop1em noDataColor" ng-show="noUserAlbumShow">
+                                    <div class="panel-heading">No data found</div>
+                                </div>
+                                                        
+                            <!--album found -->
+                            
+                                <div class="margintop1em" ng-show="userAlbumShow">  
+                            
+                                <uib-accordion close-others="oneAtATime">
+                               
+                                     <div ng-repeat="x in jsonUserDetails.albums.data">
+                                    
+                                        <div ng-if=($index==0) uib-accordion-group class="panel-default"  heading="{{x.name}}" is-open="true" >
+                                        
+                                            <img class="img-responsive albumImage" src="{{x.photos.data[0].images[0].source}}">
+                                            <img class="img-responsive albumImage" src="{{x.photos.data[1].images[0].source}}">                                        
+                                        </div> 
+                                        
+                                        <div ng-if=($index!=0) uib-accordion-group class="panel-default"  heading="{{x.name}}">
+                                        
+                                            <img class="img-responsive albumImage" src="{{x.photos.data[0].images[0].source}}">
+                                            <img class="img-responsive albumImage" src="{{x.photos.data[1].images[0].source}}">                                        
+                                        </div> 
+                                        
+                                    </div>                                  
+                                </uib-accordion>                                                      
+                                </div> 
+                            
+                            </div>
+                        </div>
+                        </div>
+                        </div>    
+                            
+                        
+                        <div class="col-xs-12 col-sm-12 col-md-6">                    
+                        <div class="panel panel-default">
+                            <div class="panel-heading">Posts</div>                                                        
+                            <div class="panel-body">
+                            
+                            <div class="progress margintop1em" ng-hide="hideUserDetailsProgressBar">
+                                    <div class="progress-bar progress-bar-striped active" role="progressbar" aria-valuenow="45" aria-valuemin="0" aria-valuemax="100" style="width: 45%">
+               
+                                    </div>
+                            </div>    
+                                
+                                
+                           <!-- no posts found -->
+                            <div ng-hide="!hideUserDetailsProgressBar">
+                            <div class="panel margintop1em noDataColor" ng-show="noUserPostShow">
+                                    <div class="panel-heading">No data found</div>
+                            </div>
+                                
+                             <!-- posts found -->                                
+                               <div class="well margintop1em" ng-show="userPostShow" ng-repeat="x in jsonUserDetails.posts.data | orderBy: 'x.created_time'">
+                                    
+                                   <span><img class="img-fluid postImage" src="{{jsonUserDetails.picture.data.url}}"></span>
+                                    <span class="inline">
+                                        <div><b>{{jsonUserDetails.name}}</b></div>
+                                        <div>{{x.created_time | date :  "yyyy-MM-dd HH:mm:ss"}}</div>
+                                   </span>
+                                   
+                                   <div class="margintop1em">{{x.message}}</div>
+                                   
+                              </div> 
+                                
+                            </div>
+                            
+                            </div>                            
+                        </div>  
+                        </div>
+                
+                   </div>
+                
+                </div>                
+                      
+               
+               
+              </div>  
+           
+            
+            <div id="page" class="tab-pane fade">
+              
+                <div ng-show="pageTabShow">
+                    
+                     <div class="progress tabClass" ng-hide="hideProgressBar">
+                        <div class="progress-bar progress-bar-striped active" role="progressbar" aria-valuenow="45" aria-valuemin="0" aria-valuemax="100" style="width: 45%">
+               
+                        </div>
+                    </div>
+                    
+                    
+                <div class="table-responsive" ng-hide="!hideProgressBar">          
+                    <table class="table table-hover">
+                        
+                        <thead>
+                            <tr>
+                                <th>#</th><th>Profile photo</th><th>Name</th><th>Favorite</th><th>Details</th>        
+                            </tr>
+                        </thead>
+                        <tbody>
+                               <tr ng-repeat="x in jsonPage.data">
+                                    <td>{{ $index + 1 }}</td>
+                                    <td><img id="profileImg" src='{{ x.picture.data.url}}' class="img-circle"></td>
+                                    <td>{{ x.name }}</td>
+                                    <td><button type="button" class="btn btn-default btnFav" ng-click="myFunctionFav(x,'page')">
+                                        <span class="glyphicon glyphicon-star-empty" ng-hide="isIdPresent(x.id)"></span>
+                                        <span class="glyphicon glyphicon-star" ng-show="isIdPresent(x.id)"></span>
+                                        </button></td>
+                                    <td><button type="button" class="btn btn-default btnDetails" ng-click="myFunctionDetails(x.id,'page')"><span class="glyphicon glyphicon-chevron-right"></span></button></td>
+                                </tr>
+                        </tbody>
+                        
+                    </table>
+                    
+                </div>
+                
+                     <div class="row" ng-hide="!hideProgressBar">
+                    
+                        <div class="col-xs-0 col-sm-1 col-md-2"></div>   
+                        
+                        <div id="centerDiv" class="col-xs-12 col-sm-10 col-md-8 margintop1em marginbottom1em">
+                            
+                            <button class="btn btn-default" ng-show="pagePreBtn" ng-click="myFunctionPagination('page',jsonPage.paging.previous)">Previous</button>                            
+                            <button class="btn btn-default next" ng-show="pageNextBtn" ng-click="myFunctionPagination('page',jsonPage.paging.next)">Next</button>
+                            
+                        </div>
+                        
+                        <div class="col-xs-0 col-sm-1 col-md-2"></div> 
+                    
+                    </div> 
+            
+                </div> 
+                
+                
+                <!-- Pagedetails content -->
+                <div ng-show="pageDetailsShow">                
+                    
+                    
+                    
+                    <div class="row detailRow">
+                        <div class="col-xs-8 col-sm-10 col-md-10">
+                        
+                            <button type="button" class="btn btn-default" ng-click="myFunctionBack('page')"><span class="glyphicon glyphicon-chevron-left"></span><span>Back</span></button>        
+                        
+                        </div>  
+                    
+                         <div class="col-xs-2 col-sm-1 col-md-1 detailStar">
+                        
+                            <button type="button" class="btn btn-default" ng-click="myFunctionFav(jsonPageDetails,'page')">
+                                <span class="glyphicon glyphicon-star-empty" ng-hide="isIdPresent(jsonPageDetails.id)"></span>
+                                        <span class="glyphicon glyphicon-star" ng-show="isIdPresent(jsonPageDetails.id)"></span>
+                             </button>        
+                        
+                        </div>
+                    
+                         <div class="col-xs-2 col-sm-1 col-md-1">
+                        
+                            <button type="button" class="btn btn-default fbShare" ng-click="myFunctionPostFB(jsonPageDetails.name,jsonPageDetails.picture.data.url)"></button>        
+                        
+                        </div>
+                   </div>
+                
+                    <!-- albums and posts -->
+                    <div class="row">
+                        
+                        <div class="col-xs-12 col-sm-12 col-md-6">
+                        <div class="panel panel-default">
+                            <div class="panel-heading">Albums</div>
+                            <div class="panel-body">
+                            
+                             <div class="progress margintop1em" ng-hide="hidePageDetailsProgressBar">
+                                    <div class="progress-bar progress-bar-striped active" role="progressbar" aria-valuenow="45" aria-valuemin="0" aria-valuemax="100" style="width: 45%">
+               
+                                    </div>
+                            </div>
+                            
+                            
+                            <div ng-hide="!hidePageDetailsProgressBar">
+                           <!-- no albums found -->
+                            
+                            <div class="panel margintop1em noDataColor" ng-show="noPageAlbumShow">
+                                    <div class="panel-heading">No data found</div>
+                            </div>
+                                                        
+                            <!--album found -->
+                            
+                            <div class="margintop1em" ng-show="pageAlbumShow">  
+                            
+                                <uib-accordion close-others="oneAtATime">
+                               
+                                    <div ng-repeat="x in jsonPageDetails.albums.data">
+                                    
+                                        <div ng-if=($index==0) uib-accordion-group class="panel-default"  heading="{{x.name}}" is-open="true" >
+                                        
+                                            <img class="img-responsive albumImage" src="{{x.photos.data[0].images[0].source}}">
+                                            <img class="img-responsive albumImage" src="{{x.photos.data[1].images[0].source}}">                                        
+                                        </div> 
+                                        
+                                        <div ng-if=($index!=0) uib-accordion-group class="panel-default"  heading="{{x.name}}">
+                                        
+                                            <img class="img-responsive albumImage" src="{{x.photos.data[0].images[0].source}}">
+                                            <img class="img-responsive albumImage" src="{{x.photos.data[1].images[0].source}}">                                        
+                                        </div> 
+                                        
+                                    </div>    
+                                </uib-accordion>                                                      
+                            </div> 
+                            </div>   
+                        </div>
+                        </div>    
+                        </div>    
+                        
+                         <div class="col-xs-12 col-sm-12 col-md-6">                   
+                        <div class="panel panel-default">
+                            <div class="panel-heading">Posts</div>                                                        
+                            <div class="panel-body">
+                            
+                             <div class="progress margintop1em" ng-hide="hidePageDetailsProgressBar">
+                                    <div class="progress-bar progress-bar-striped active" role="progressbar" aria-valuenow="45" aria-valuemin="0" aria-valuemax="100" style="width: 45%">
+               
+                                    </div>
+                            </div>    
+                             
+                             <div ng-hide="!hidePageDetailsProgressBar">    
+                           <!-- no posts found -->
+                            
+                            <div class="panel margintop1em noDataColor" ng-show="noPagePostShow">
+                                    <div class="panel-heading">No data found</div>
+                            </div>
+                                
+                             <!-- posts found -->                                
+                               <div class="well margintop1em" ng-show="pagePostShow" ng-repeat="x in jsonPageDetails.posts.data | orderBy: 'x.created_time'">
+                                    
+                                  
+                                   <span><img class="img-fluid postImage" src="{{jsonPageDetails.picture.data.url}}"></span>
+                                        <span class="inline">
+                                            <div><b>{{jsonPageDetails.name}}</b></div>
+                                            <div>{{x.created_time | date :  "yyyy-MM-dd HH:mm:ss"}}</div>
+                                        </span>
+                                       
+                                   
+                                   
+                                   <div class="margintop1em">{{x.message}}</div>
+                                   
+                              </div>                                  
+                            
+                            </div> 
+                            </div>
+                        </div>
+                        </div>
+                
+                   </div>
+                
+                </div>                
+               
+                
+                
+                
+            </div>
+            
+            
+            
+                
+            
+            <div id="event" class="tab-pane fade">
+                
+                
+                
+                <div ng-show="eventTabShow">
+                    
+                    <div class="progress tabClass" ng-hide="hideProgressBar">
+                        <div class="progress-bar progress-bar-striped active" role="progressbar" aria-valuenow="45" aria-valuemin="0" aria-valuemax="100" style="width: 45%">
+               
+                        </div>
+                    </div>
+                    
+                    
+                <div class="table-responsive" ng-hide="!hideProgressBar">          
+                    <table class="table table-hover">
+                        
+                        <thead>
+                            <tr>
+                                <th>#</th><th>Profile photo</th><th>Name</th><th>Favorite</th><th>Details</th>        
+                            </tr>
+                        </thead>
+                        <tbody>
+                               <tr ng-repeat="x in jsonEvent.data">
+                                    <td>{{ $index + 1 }}</td>
+                                    <td><img id="profileImg" src='{{ x.picture.data.url}}' class="img-circle"></td>
+                                    <td>{{ x.name }}</td>
+                                    <td><button type="button" class="btn btn-default btnFav" ng-click="myFunctionFav(x,'event')">
+                                        <span class="glyphicon glyphicon-star-empty" ng-hide="isIdPresent(x.id)"></span>
+                                        <span class="glyphicon glyphicon-star" ng-show="isIdPresent(x.id)"></span>
+                                        </button></td>
+                                    <td><button type="button" class="btn btn-default btnDetails" ng-click="myFunctionDetails(x.id,'event')"><span class="glyphicon glyphicon-chevron-right"></span></button></td>
+                                </tr>
+                        </tbody>
+                        
+                    </table>
+                    
+                </div>
+                
+                         <div class="row" ng-hide="!hideProgressBar">
+                    
+                        <div class="col-xs-0 col-sm-1 col-md-2"></div>   
+                        
+                        <div id="centerDiv" class="col-xs-12 col-sm-10 col-md-8 margintop1em marginbottom1em">
+                            
+                            <button class="btn btn-default" ng-show="eventPreBtn" ng-click="myFunctionPagination('event',jsonEvent.paging.previous)">Previous</button>                            
+                            <button class="btn btn-default next" ng-show="eventNextBtn" ng-click="myFunctionPagination('event',jsonEvent.paging.next)">Next</button>
+                            
+                        </div>
+                        
+                        <div class="col-xs-0 col-sm-1 col-md-2"></div> 
+                    
+                    </div> 
+            </div>
+                
+                <!-- Event details content -->
+                <div ng-show="eventDetailsShow">                
+                    
+                    
+                    
+                    <div class="row detailRow">
+                        <div class="col-xs-8 col-sm-10 col-md-10">
+                        
+                            <button type="button" class="btn btn-default" ng-click="myFunctionBack('event')"><span class="glyphicon glyphicon-chevron-left"></span><span>Back</span></button>        
+                        
+                        </div>  
+                    
+                         <div class="col-xs-2 col-sm-1 col-md-1 detailStar">
+                        
+                           <button type="button" class="btn btn-default" ng-click="myFunctionFav(jsonEventDetails,'event')">
+                                <span class="glyphicon glyphicon-star-empty" ng-hide="isIdPresent(jsonEventDetails.id)"></span>
+                                        <span class="glyphicon glyphicon-star" ng-show="isIdPresent(jsonEventDetails.id)"></span>
+                             </button>          
+                        
+                        </div>
+                    
+                         <div class="col-xs-2 col-sm-1 col-md-1">
+                        
+                            <button type="button" class="btn btn-default fbShare" ng-click="myFunctionPostFB(jsonEventDetails.name,jsonEventDetails.picture.data.url)"></button>        
+                        
+                        </div>
+                   </div>
+                
+                    <!-- albums and posts -->
+                    <div class="row">
+                        
+                        <div class="col-xs-12 col-sm-12 col-md-6">
+                        <div class="panel panel-default">
+                            <div class="panel-heading">Albums</div>
+                            <div class="panel-body">
+                             <div class="progress margintop1em" ng-hide="hideEventDetailsProgressBar">
+                                    <div class="progress-bar progress-bar-striped active" role="progressbar" aria-valuenow="45" aria-valuemin="0" aria-valuemax="100" style="width: 45%">
+               
+                                    </div>
+                            </div>
+                            
+                             <div ng-hide="!hideEventDetailsProgressBar">
+                           <!-- no albums found -->
+                            
+                            <div class="panel margintop1em noDataColor" ng-show="noEventAlbumShow">
+                                    <div class="panel-heading">No data found</div>
+                            </div>
+                                                        
+                            <!--album found -->
+                            
+                            <div class="margintop1em" ng-show="eventAlbumShow">  
+                            
+                                <uib-accordion close-others="oneAtATime">
+                               
+                                    <div ng-repeat="x in jsonEventDetails.albums.data">
+                                    
+                                        <div ng-if=($index==0) uib-accordion-group class="panel-default"  heading="{{x.name}}" is-open="true" >
+                                        
+                                            <img class="img-responsive albumImage" src="{{x.photos.data[0].images[0].source}}">
+                                            <img class="img-responsive albumImage" src="{{x.photos.data[1].images[0].source}}">                                        
+                                        </div> 
+                                        
+                                        <div ng-if=($index!=0) uib-accordion-group class="panel-default"  heading="{{x.name}}">
+                                        
+                                            <img class="img-responsive albumImage" src="{{x.photos.data[0].images[0].source}}">
+                                            <img class="img-responsive albumImage" src="{{x.photos.data[1].images[0].source}}">                                        
+                                        </div> 
+                                        
+                                    </div>                                   
+                                </uib-accordion>                                                      
+                            </div>  
+                            </div>
+                        </div>
+                        </div>
+                        </div>
+                        
+                        <div class="col-xs-12 col-sm-12 col-md-6">                    
+                        <div class="panel panel-default">
+                            <div class="panel-heading">Posts</div>                                                        
+                            <div class="panel-body">
+                            
+                                 <div class="progress margintop1em" ng-hide="hideEventDetailsProgressBar">
+                                    <div class="progress-bar progress-bar-striped active" role="progressbar" aria-valuenow="45" aria-valuemin="0" aria-valuemax="100" style="width: 45%">
+               
+                                    </div>
+                                </div>
+                                
+                         <div ng-hide="!hideEventDetailsProgressBar">
+                           <!-- no posts found -->
+                            
+                            <div class="panel margintop1em noDataColor" ng-show="noEventPostShow">
+                                    <div class="panel-heading">No data found</div>
+                            </div>
+                                
+                             <!-- posts found -->                                
+                               <div class="well margintop1em" ng-show="eventPostShow" ng-repeat="x in jsonEventDetails.posts.data | orderBy: 'x.created_time'">
+                                    
+                                   <span><img class="img-fluid postImage" src="{{jsonEventDetails.picture.data.url}}"></span>
+                                    <span class="inline">
+                                        <div><b>{{jsonEventDetails.name}}</b></div>
+                                        <div>{{x.created_time | date :  "yyyy-MM-dd HH:mm:ss"}}</div>
+                                   </span>
+                                   
+                                   <div class="margintop1em">{{x.message}}</div>
+                                   
+                              </div>                                  
+                            </div>
+                            </div>                            
+                        </div>  
+                        </div>
+                
+                   </div>
+                
+                </div>                
+               
+                
+                
+            </div>    
+            
+            <div id="place" class="tab-pane fade">
+                
+                 
+                
+                <div ng-show="placeTabShow">
+                    
+                    <div class="progress tabClass" ng-hide="hideProgressBar">
+                        <div class="progress-bar progress-bar-striped active" role="progressbar" aria-valuenow="45" aria-valuemin="0" aria-valuemax="100" style="width: 45%">
+               
+                        </div>
+                    </div>
+                    
+                <div class="table-responsive" ng-hide="!hideProgressBar">          
+                    <table class="table table-hover">
+                        
+                        <thead>
+                            <tr>
+                                <th>#</th><th>Profile photo</th><th>Name</th><th>Favorite</th><th>Details</th>        
+                            </tr>
+                        </thead>
+                        <tbody>
+                               <tr ng-repeat="x in jsonPlace.data">
+                                    <td>{{ $index + 1 }}</td>
+                                    <td><img id="profileImg" src='{{ x.picture.data.url}}' class="img-circle"></td>
+                                    <td>{{ x.name }}</td>
+                                    <td><button type="button" class="btn btn-default btnFav" ng-click="myFunctionFav(x,'place')">
+                                        <span class="glyphicon glyphicon-star-empty" ng-hide="isIdPresent(x.id)"></span>
+                                        <span class="glyphicon glyphicon-star" ng-show="isIdPresent(x.id)"></span>
+                                        </button></td>
+                                    <td><button type="button" class="btn btn-default btnDetails" ng-click="myFunctionDetails(x.id,'place')"><span class="glyphicon glyphicon-chevron-right"></span></button></td>
+                                </tr>
+                        </tbody>
+                        
+                    </table>
+                    
+                </div>
+                
+                 <div class="row" ng-hide="!hideProgressBar">
+                    
+                        <div class="col-xs-0 col-sm-1 col-md-2"></div>   
+                        
+                        <div id="centerDiv" class="col-xs-12 col-sm-10 col-md-8 margintop1em marginbottom1em">
+                            
+                            <button class="btn btn-default" ng-show="placePreBtn" ng-click="myFunctionPagination('place',jsonPlace.paging.previous)">Previous</button>                            
+                            <button class="btn btn-default next" ng-show="userNextBtn" ng-click="myFunctionPagination('place',jsonPlace.paging.next)">Next</button>
+                            
+                        </div>
+                        
+                        <div class="col-xs-0 col-sm-1 col-md-2"></div> 
+                    
+                    </div> 
+            </div>
+                
+                
+                 <!-- Place details content -->
+                <div ng-show="placeDetailsShow">                
+                    
+                    
+                    
+                    <div class="row detailRow">
+                        <div class="col-xs-8 col-sm-10 col-md-10">
+                        
+                            <button type="button" class="btn btn-default" ng-click="myFunctionBack('place')"><span class="glyphicon glyphicon-chevron-left"></span><span>Back</span></button>        
+                        
+                        </div>  
+                    
+                         <div class="col-xs-2 col-sm-1 col-md-1 detailStar">
+                        
+                            <button type="button" class="btn btn-default" ng-click="myFunctionFav(jsonPlaceDetails,'place')">
+                                <span class="glyphicon glyphicon-star-empty" ng-hide="isIdPresent(jsonPlaceDetails.id)"></span>
+                                        <span class="glyphicon glyphicon-star" ng-show="isIdPresent(jsonPlaceDetails.id)"></span>
+                             </button>         
+                        
+                        </div>
+                    
+                         <div class="col-xs-2 col-sm-1 col-md-1">
+                        
+                            <button type="button" class="btn btn-default fbShare" ng-click="myFunctionPostFB(jsonPlaceDetails.name,jsonPlaceDetails.picture.data.url)"></button>        
+                        
+                        </div>
+                   </div>
+                
+                    <!-- albums and posts -->
+                    <div class="row">
+                        <div class="col-xs-12 col-sm-12 col-md-6">
+                        <div class="panel panel-default">
+                            <div class="panel-heading">Albums</div>
+                            <div class="panel-body">
+                             <div class="progress margintop1em" ng-hide="hidePlaceDetailsProgressBar">
+                                    <div class="progress-bar progress-bar-striped active" role="progressbar" aria-valuenow="45" aria-valuemin="0" aria-valuemax="100" style="width: 45%">
+               
+                                    </div>
+                            </div>
+                            
+                        <div ng-hide="!hidePlaceDetailsProgressBar">
+                           <!-- no albums found -->
+                            
+                            <div class="panel margintop1em noDataColor" ng-show="noPlaceAlbumShow">
+                                    <div class="panel-heading">No data found</div>
+                            </div>
+                                                        
+                            <!--album found -->
+                            
+                            <div class="margintop1em" ng-show="placeAlbumShow">  
+                            
+                                <uib-accordion close-others="oneAtATime">
+                               
+                                    <div ng-repeat="x in jsonPlaceDetails.albums.data">
+                                    
+                                        <div ng-if=($index==0) uib-accordion-group class="panel-default"  heading="{{x.name}}" is-open="true" >
+                                        
+                                            <img class="img-responsive albumImage" src="{{x.photos.data[0].images[0].source}}">
+                                            <img class="img-responsive albumImage" src="{{x.photos.data[1].images[0].source}}">                                        
+                                        </div> 
+                                        
+                                        <div ng-if=($index!=0) uib-accordion-group class="panel-default"  heading="{{x.name}}">
+                                        
+                                            <img class="img-responsive albumImage" src="{{x.photos.data[0].images[0].source}}">
+                                            <img class="img-responsive albumImage" src="{{x.photos.data[1].images[0].source}}">                                        
+                                        </div> 
+                                        
+                                    </div>                                   
+                                </uib-accordion>                                                      
+                            </div>
+                            </div>
+                        </div>
+                        </div>
+                        </div>
+                        
+                         <div class="col-xs-12 col-sm-12 col-md-6">                   
+                        <div class="panel panel-default">
+                            <div class="panel-heading">Posts</div>                                                        
+                            <div class="panel-body">
+                            
+                             <div class="progress margintop1em" ng-hide="hidePlaceDetailsProgressBar">
+                                    <div class="progress-bar progress-bar-striped active" role="progressbar" aria-valuenow="45" aria-valuemin="0" aria-valuemax="100" style="width: 45%">
+               
+                                    </div>
+                            </div>
+                             
+                                
+                        <div ng-hide="!hidePlaceDetailsProgressBar">    
+                           <!-- no posts found -->
+                            
+                            <div class="panel margintop1em noDataColor" ng-show="noPlacePostShow">
+                                    <div class="panel-heading">No data found</div>
+                            </div>
+                                
+                             <!-- posts found -->                                
+                               <div class="well margintop1em" ng-show="placePostShow" ng-repeat="x in jsonPlaceDetails.posts.data | orderBy: 'x.created_time'">
+                                    
+                                   <span><img class="img-fluid postImage" src="{{jsonPlaceDetails.picture.data.url}}"></span>
+                                    <span class="inline">
+                                        <div><b>{{jsonPlaceDetails.name}}</b></div>
+                                        <div>{{x.created_time | date :  "yyyy-MM-dd HH:mm:ss"}}</div>
+                                   </span>
+                                   
+                                   <div class="margintop1em">{{x.message}}</div>
+                                   
+                              </div>                                  
+                            </div>
+                            </div>                            
+                        </div>    
+                        </div>
+                
+                   </div>
+                
+                </div>                
+               
+                
+                
+                
+                
+            </div>    
+            
+            <div id="group" class="tab-pane fade">
+                
+                <div ng-show="groupTabShow">
+                    
+                    <div class="progress tabClass" ng-hide="hideProgressBar">
+                        <div class="progress-bar progress-bar-striped active" role="progressbar" aria-valuenow="45" aria-valuemin="0" aria-valuemax="100" style="width: 45%">
+               
+                        </div>
+                    </div>
+                    
+                    
+                <div class="table-responsive" ng-hide="!hideProgressBar">          
+                    <table class="table table-hover">
+                        
+                        <thead>
+                            <tr>
+                                <th>#</th><th>Profile photo</th><th>Name</th><th>Favorite</th><th>Details</th>        
+                            </tr>
+                        </thead>
+                        <tbody>
+                               <tr ng-repeat="x in jsonGroup.data">
+                                    <td>{{ $index + 1 }}</td>
+                                    <td><img id="profileImg" src='{{ x.picture.data.url}}' class="img-circle"></td>
+                                    <td>{{ x.name }}</td>
+                                    <td><button type="button" class="btn btn-default btnFav" ng-click="myFunctionFav(x,'group')">
+                                        <span class="glyphicon glyphicon-star-empty" ng-hide="isIdPresent(x.id)"></span>
+                                        <span class="glyphicon glyphicon-star" ng-show="isIdPresent(x.id)"></span>
+                                        </button></td>
+                                    <td><button type="button" class="btn btn-default btnDetails" ng-click="myFunctionDetails(x.id,'group')"><span class="glyphicon glyphicon-chevron-right"></span></button></td>
+                                </tr>
+                        </tbody>
+                        
+                    </table>
+                    
+                </div>
+                
+                     <div class="row" ng-hide="!hideProgressBar">
+                    
+                        <div class="col-xs-0 col-sm-1 col-md-2"></div>   
+                        
+                        <div id="centerDiv" class="col-xs-12 col-sm-10 col-md-8 margintop1em marginbottom1em">
+                            
+                            <button class="btn btn-default" ng-show="groupPreBtn" ng-click="myFunctionPagination('group',jsonGroup.paging.previous)">Previous</button>                            
+                            <button class="btn btn-default next" ng-show="groupNextBtn" ng-click="myFunctionPagination('group',jsonGroup.paging.next)">Next</button>
+                            
+                        </div>
+                        
+                        <div class="col-xs-0 col-sm-1 col-md-2"></div> 
+                    
+                    </div> 
+
+            </div>
+                
+                <!-- Group details content -->
+                <div ng-show="groupDetailsShow">                
+                    
+                    
+                    
+                    <div class="row detailRow">
+                        <div class="col-xs-8 col-sm-10 col-md-10">
+                        
+                            <button type="button" class="btn btn-default" ng-click="myFunctionBack('group')"><span class="glyphicon glyphicon-chevron-left"></span><span>Back</span></button>        
+                        
+                        </div>  
+                    
+                         <div class="col-xs-2 col-sm-1 col-md-1 detailStar">
+                        
+                            <button type="button" class="btn btn-default" ng-click="myFunctionFav(jsonGroupDetails,'group')">
+                                <span class="glyphicon glyphicon-star-empty" ng-hide="isIdPresent(jsonGroupDetails.id)"></span>
+                                        <span class="glyphicon glyphicon-star" ng-show="isIdPresent(jsonGroupDetails.id)"></span>
+                             </button>        
+                        
+                        </div>
+                    
+                         <div class="col-xs-2 col-sm-1 col-md-1">
+                        
+                            <button type="button" class="btn btn-default fbShare" ng-click="myFunctionPostFB(jsonGroupDetails.name,jsonGroupDetails.picture.data.url)"></button>        
+                        
+                        </div>
+                   </div>
+                
+                    <!-- albums and posts -->
+                    <div class="row">
+                        <div class="col-xs-12 col-sm-12 col-md-6">
+                        <div class="panel panel-default">
+                            <div class="panel-heading">Albums</div>
+                            <div class="panel-body">
+                             <div class="progress margintop1em" ng-hide="hideGroupDetailsProgressBar">
+                                    <div class="progress-bar progress-bar-striped active" role="progressbar" aria-valuenow="45" aria-valuemin="0" aria-valuemax="100" style="width: 45%">
+               
+                                    </div>
+                            </div>
+                            
+                         <div ng-hide="!hideGroupDetailsProgressBar">
+                           <!-- no albums found -->
+                            
+                            <div class="panel margintop1em noDataColor" ng-show="noGroupAlbumShow">
+                                    <div class="panel-heading">No data found</div>
+                            </div>
+                                                        
+                            <!--album found -->
+                            
+                            <div class="margintop1em" ng-show="groupAlbumShow">  
+                            
+                                <uib-accordion close-others="oneAtATime">
+                               
+                                    <div ng-repeat="x in jsonGroupDetails.albums.data">
+                                    
+                                        <div ng-if=($index==0) uib-accordion-group class="panel-default"  heading="{{x.name}}" is-open="true" >
+                                        
+                                            <img class="img-responsive albumImage" src="{{x.photos.data[0].images[0].source}}">
+                                            <img class="img-responsive albumImage" src="{{x.photos.data[1].images[0].source}}">                                        
+                                        </div> 
+                                        
+                                        <div ng-if=($index!=0) uib-accordion-group class="panel-default"  heading="{{x.name}}">
+                                        
+                                            <img class="img-responsive albumImage" src="{{x.photos.data[0].images[0].source}}">
+                                            <img class="img-responsive albumImage" src="{{x.photos.data[1].images[0].source}}">                                        
+                                        </div> 
+                                        
+                                    </div>                                  
+                                </uib-accordion>                                                      
+                            </div>  
+                            </div>
+                        </div>
+                        </div>    
+                        </div>    
+                        
+                        <div class="col-xs-12 col-sm-12 col-md-6">                    
+                        <div class="panel panel-default">
+                            <div class="panel-heading">Posts</div>                                                        
+                            <div class="panel-body">
+                            
+                                 <div class="progress margintop1em" ng-hide="hideGroupDetailsProgressBar">
+                                    <div class="progress-bar progress-bar-striped active" role="progressbar" aria-valuenow="45" aria-valuemin="0" aria-valuemax="100" style="width: 45%">
+               
+                                    </div>
+                                </div>
+                              
+                        <div ng-hide="!hideGroupDetailsProgressBar">
+                           <!-- no posts found -->
+                            
+                            <div class="panel margintop1em noDataColor" ng-show="noGroupPostShow">
+                                    <div class="panel-heading">No data found</div>
+                            </div>
+                                
+                             <!-- posts found -->                                
+                               <div class="well margintop1em" ng-show="groupPostShow" ng-repeat="x in jsonGroupDetails.posts.data | orderBy: 'x.created_time'">
+                                    
+                                   <span><img class="img-fluid postImage" src="{{jsonGroupDetails.picture.data.url}}"></span>
+                                    <span class="inline">
+                                        <div><b>{{jsonGroupDetails.name}}</b></div>
+                                        <div>{{x.created_time | date :  "yyyy-MM-dd HH:mm:ss"}}</div>
+                                   </span>
+                                   
+                                   <div class="margintop1em">{{x.message}}</div>
+                                   
+                              </div>                                  
+                            </div>
+                            </div>                            
+                        </div> 
+                        </div>    
+                
+                   </div>
+                
+                </div>                
+               
+                
+                
+            </div>    
+            
+            
+            <div id="fav" class="tab-pane fade">
+                  
+                <div ng-show="favTabShow">
+                    
+                    
+                    
+                 <div class="table-responsive" ng-init="myFunctionGetFav()" >          
+                    <table class="table table-hover">
+                        
+                        <thead>
+                            <tr>
+                                <th>#</th><th>Profile photo</th><th>Name</th><th>Type</th><th>Favorite</th><th>Details</th>        
+                            </tr>
+                        </thead>
+                        <tbody>
+                               <tr ng-repeat="x in jsonFav">
+                                    <td>{{ $index + 1 }}</td>
+                                    <td><img id="profileImg" src='{{ x.picture}}' class="img-circle"></td>
+                                    <td>{{x.name}}</td>
+                                    <td>{{x.type}}</td>
+                                    <td><button type="button" class="btn btn-default btnFav" ng-click="myFunctionDeleteFav(x.id)">
+                                        <span class="glyphicon glyphicon-trash"></span>                                        
+                                        </button></td>
+                                    <td><button type="button" class="btn btn-default btnDetails" ng-click="myFunctionDetails(x.id,'fav')"><span class="glyphicon glyphicon-chevron-right"></span></button></td>
+                                </tr>
+                        </tbody>
+                        
+                    </table>
+                    
+                    
+                </div>
+                    
+                <div class="progress tabClass" ng-hide="hideProgressBar">
+                        <div class="progress-bar progress-bar-striped active" role="progressbar" aria-valuenow="45" aria-valuemin="0" aria-valuemax="100" style="width: 45%">
+               
+                        </div>
+                </div>
+                
+                
+                
+            </div>
+                
+                 <!-- Fav details content -->
+                <div ng-show="favDetailsShow">                
+                    
+                    
+                    
+                    <div class="row detailRow">
+                        <div class="col-xs-8 col-sm-10 col-md-10">
+                        
+                            <button type="button" class="btn btn-default" ng-click="myFunctionBack('fav')"><span class="glyphicon glyphicon-chevron-left"></span><span>Back</span></button>        
+                        
+                        </div>  
+                    
+                         <div class="col-xs-2 col-sm-1 col-md-1 detailStar">
+                        
+                             <!-- myFunctionFav change type  -->
+                            <button type="button" class="btn btn-default" ng-click="myFunctionFav(jsonFavDetails,'fav')">
+                                <span class="glyphicon glyphicon-star-empty" ng-hide="isIdPresent(jsonFavDetails.id)"></span>
+                                        <span class="glyphicon glyphicon-star" ng-show="isIdPresent(jsonFavDetails.id)"></span>
+                             </button>        
+                        
+                        </div>
+                    
+                         <div class="col-xs-2 col-sm-1 col-md-1">
+                        
+                            <button type="button" class="btn btn-default fbShare" ng-click="myFunctionPostFB(jsonFavDetails.name,jsonFavDetails.picture.data.url)"></button>        
+                        
+                        </div>
+                   </div>
+                
+                    <!-- albums and posts -->
+                    <div class="row">
+                        <div class="col-xs-12 col-sm-12 col-md-6">
+                        <div class="panel panel-default">
+                            <div class="panel-heading">Albums</div>
+                            <div class="panel-body">
+                             <div class="progress margintop1em" ng-hide="hideFavDetailsProgressBar">
+                                    <div class="progress-bar progress-bar-striped active" role="progressbar" aria-valuenow="45" aria-valuemin="0" aria-valuemax="100" style="width: 45%">
+               
+                                    </div>
+                            </div>
+                            
+                         <div ng-hide="!hideFavDetailsProgressBar">
+                           <!-- no albums found -->
+                            
+                            <div class="panel margintop1em noDataColor" ng-show="noFavAlbumShow">
+                                    <div class="panel-heading">No data found</div>
+                            </div>
+                                                        
+                            <!--album found -->
+                            
+                            <div class="margintop1em" ng-show="favAlbumShow">  
+                            
+                                <uib-accordion close-others="oneAtATime">
+                               
+                                     <div ng-repeat="x in jsonFavDetails.albums.data">
+                                    
+                                        <div ng-if=($index==0) uib-accordion-group class="panel-default"  heading="{{x.name}}" is-open="true" >
+                                        
+                                            <img class="img-responsive albumImage" src="{{x.photos.data[0].images[0].source}}">
+                                            <img class="img-responsive albumImage" src="{{x.photos.data[1].images[0].source}}">                                        
+                                        </div> 
+                                        
+                                        <div ng-if=($index!=0) uib-accordion-group class="panel-default"  heading="{{x.name}}">
+                                        
+                                            <img class="img-responsive albumImage" src="{{x.photos.data[0].images[0].source}}">
+                                            <img class="img-responsive albumImage" src="{{x.photos.data[1].images[0].source}}">                                        
+                                        </div> 
+                                        
+                                    </div>                                  
+                                </uib-accordion>                                                      
+                            </div>  
+                            </div>
+                        </div>
+                        </div>    
+                        </div>
+                        
+                         <div class="col-xs-12 col-sm-12 col-md-6">                   
+                        <div class="panel panel-default">
+                            <div class="panel-heading">Posts</div>                                                        
+                            <div class="panel-body">
+                            
+                                 <div class="progress margintop1em" ng-hide="hideFavDetailsProgressBar">
+                                    <div class="progress-bar progress-bar-striped active" role="progressbar" aria-valuenow="45" aria-valuemin="0" aria-valuemax="100" style="width: 45%">
+               
+                                    </div>
+                                </div>
+                              
+                        <div ng-hide="!hideFavDetailsProgressBar">
+                           <!-- no posts found -->
+                            
+                            <div class="panel margintop1em noDataColor" ng-show="noFavPostShow">
+                                    <div class="panel-heading">No data found</div>
+                            </div>
+                                
+                             <!-- posts found -->                                
+                               <div class="well margintop1em" ng-show="favPostShow" ng-repeat="x in jsonFavDetails.posts.data | orderBy: 'x.created_time'">
+                                    
+                                   <span><img class="img-fluid postImage" src="{{jsonFavDetails.picture.data.url}}"></span>
+                                    <span class="inline">
+                                        <div><b>{{jsonFavDetails.name}}</b></div>
+                                        <div>{{x.created_time | date :  "yyyy-MM-dd HH:mm:ss"}}</div>
+                                   </span>
+                                   
+                                   <div class="margintop1em">{{x.message}}</div>
+                                   
+                              </div>                                  
+                            </div>
+                            </div>                            
+                        </div> 
+                        </div>
+                
+                   </div>
+                
+                </div> 
+            </div>
+        
+        </div> 
+        
+    </div>    
+
+    
+    
+    
+    
+    
+    
+    
+</div>
+    
+</body>
+
+</html>

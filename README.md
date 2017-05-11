@@ -10,4 +10,6 @@ Objectives of this project:  <br />
 
 Project description  and implementation details can be found in  HW8_Description.pdf and Homework8Video.mp4.
 
+(note: use forefox to view the link) <br/>
 Website link : http://www-scf.usc.edu/~sandeshh/homework8/HW8.html
+
